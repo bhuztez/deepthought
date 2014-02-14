@@ -3,6 +3,10 @@
 <head>
 <title>Deep Thought</title>
 <link rel="stylesheet" type="text/css" href="base.css" />
+<script type="application/javascript;version=1.8" src="../deepthought-javascript/dfa.js"></script>
+<script type="application/javascript;version=1.8" src="../deepthought-javascript/slr.js"></script>
+<script type="application/javascript;version=1.8" src="../deepthought-javascript/datalog.js"></script>
+<script type="application/javascript;version=1.8" src="example.js"></script>
 </head>
 
 <body>
@@ -28,6 +32,323 @@ X = 42
 
 <h2>Examples</h2>
 
+<p>Works only in Firefox!!!</p>
+
+<h3>Reachable</h3>
+
+<p></p>
+
+<div class="example">
+<label>Rules:
+<textarea>
+reachable(S,D): path(S,D).
+reachable(S,D): reachable(S,Z), path(Z,D).
+
+path(a,b).
+path(b,c).
+path(b,a).
+path(c,d).
+</textarea>
+</label>
+
+<div class="toolbar">
+<label>Query:<input type="text" value="reachable(X, Y)." /></label>
+<button>Query</button>
+</div>
+
+<div class="result">
+</div>
+</div>
+
+
+<h3>MULVAL</h3>
+
+<p>an example copied from <a href="http://people.cis.ksu.edu/~xou/mulval/">The MulVal Project</a></p>
+
+<div class="example">
+<label>Rules:
+<textarea>
+netAccess(attacker, Host, Protocol, Port):
+  hacl(internet, Host, Protocol, Port).
+
+execCode(Person, Host, Priv):
+  vulExists(Host, VulID, Program),
+  vulProperty(VulID, remoteExploit, privilegeEscalation),
+  networkService(Host, Program, Protocol, Port, Priv),
+  netAccess(Person, Host, Protocol, Port).
+
+networkService(webServer, httpd, tcp, 80, apache).
+hacl(internet, webServer, tcp, 80).
+malicious(attacker).
+
+vulExists(webServer, 'CAN-2002-0392', httpd).
+vulProperty('CAN-2002-0392', remoteExploit, privilegeEscalation).
+</textarea>
+</label>
+
+<div class="toolbar">
+<label>Query:<input type="text" value="execCode(Person, Host, Priv), malicious(Person)." /></label>
+<button>Query</button>
+</div>
+
+<div class="result">
+</div>
+</div>
+
+
+<h3>UNO</h3>
+
+<p></p>
+
+<div class="example">
+<label>Rules:
+<textarea>
+color(red).
+color(yellow).
+color(green).
+color(blue).
+
+rank(0).
+rank(1).
+rank(2).
+rank(3).
+rank(4).
+rank(5).
+rank(6).
+rank(7).
+rank(8).
+rank(9).
+rank(skip).
+rank(reverse).
+rank(draw_two).
+
+wild_rank(wild).
+wild_rank(wild_draw_four).
+
+play(Color, Rank):
+    color(Color),
+    rank(Rank),
+    hand(Color, Rank),
+    match(color, Color).
+
+play(Color, Rank):
+    color(Color),
+    rank(Rank),
+    hand(Color, Rank),
+    match(rank, Rank).
+
+play(wild, Rank):
+    wild_rank(Rank),
+    hand(wild, Rank).
+
+match(color, red).
+match(rank, 1).
+
+hand(red, 1).
+hand(blue, 1).
+hand(blue, 2).
+hand(green, 2).
+hand(wild, wild).
+</textarea>
+</label>
+
+<div class="toolbar">
+<label>Query:<input type="text" value="play(Color, Rank)." /></label>
+<button>Query</button>
+</div>
+
+<div class="result">
+</div>
+</div>
+
+
+<h3>Family Tree</h3>
+
+<p>an example copied from <a href="http://www.cs.hmc.edu/cs60/assignments/hw3pr1.txt">http://www.cs.hmc.edu/cs60/assignments/hw3pr1.txt</a> </p>
+
+<div class="example">
+<label>Rules:
+<textarea>
+same_person(A, A):
+  male(A).
+
+same_person(A, A):
+  female(A).
+
+relation(father, A, B):
+  parent(A, B),
+  male(A).
+
+relation(mother, A, B):
+  parent(A, B),
+  female(A).
+
+relation(grandfather, A, B):
+  relation(father, A, C),
+  parent(C, B).
+
+relation(grandmother, A, B):
+  relation(mother, A, C),
+  parent(C, B).
+
+relation(son, A, B):
+  parent(B, A),
+  male(A).
+
+relation(daughter, A, B):
+  parent(B, A),
+  female(A).
+
+relation(grandson, A, B):
+  relation(son, A, C),
+  parent(B, C).
+
+relation(granddaughter, A, B):
+  relation(daughter, A, C),
+  parent(B, C).
+
+relation(husband, A, B):
+  relation(father, A, C),
+  relation(mother, B, C).
+
+relation(wife, A, B):
+  relation(husband, B, A).
+
+relation(brother, A, B):
+  relation(son, A, C),
+  parent(C, B),
+  not same_person(A, B).
+
+relation(sister, A, B):
+  relation(daughter, A, C),
+  parent(C, B),
+  not same_person(A, B).
+
+relation(uncle, A, B):
+  relation(brother, A, C),
+  parent(C, B).
+
+relation(aunt, A, B):
+  relation(sister, A, C),
+  parent(C, B).
+
+relation(cousin, A, B):
+  relation(uncle, C, A),
+  parent(C, B).
+
+relation(cousin, A, B):
+  relation(aunt, C, A),
+  parent(C, B).
+
+relation(niece, A, B):
+  relation(son, A, C),
+  relation(brother, C, B).
+
+relation(niece, A, B):
+  relation(son, A, C),
+  relation(sister, C, B).
+
+relation(nephew, A, B):
+  relation(daughter, A, C),
+  relation(brother, C, B).
+
+relation(nephew, A, B):
+  relation(daughter, A, C),
+  relation(sister, C, B).
+
+parent(olf, skug).
+parent(helga, skug).
+
+parent(skug, esmerelda).
+parent(skugerina, esmerelda).
+
+parent(esmerelda, klotho).
+parent(gemini, klotho).
+
+parent(esmerelda, atropos).
+parent(gemini, atropos).
+
+parent(esmerelda, lachesis).
+parent(gemini, lachesis).
+
+parent(olf, homericus).
+parent(helga, homericus).
+
+parent(ug, matilda).
+parent(uggette, matilda).
+
+parent(homericus, homer).
+parent(matilda, homer).
+
+parent(homericus, gomer).
+parent(matilda, gomer).
+
+parent(homer, bart).
+parent(marge, bart).
+
+parent(homer, lisa).
+parent(marge, lisa).
+
+parent(homer, maggie).
+parent(marge, maggie).
+
+parent(john, marge).
+parent(jackie, marge).
+
+parent(john, selma).
+parent(jackie, selma).
+
+parent(john, patty).
+parent(jackie, patty).
+
+parent(john, glum).
+parent(jackie, glum).
+
+parent(glum, millhouse).
+parent(cher, millhouse).
+
+parent(glum, terpsichore).
+parent(cher, terpsichore).
+
+female(helga).
+female(esmerelda).
+female(skugerina).
+female(uggette).
+female(matilda).
+female(marge).
+female(jackie).
+female(selma).
+female(patty).
+female(cher).
+female(lisa).
+female(maggie).
+female(klotho).
+female(atropos).
+female(lachesis).
+female(terpsichore).
+
+male(olf).
+male(skug).
+male(homericus).
+male(ug).
+male(homer).
+male(gomer).
+male(gemini).
+male(john).
+male(glum).
+male(bart).
+male(millhouse).
+</textarea>
+</label>
+
+<div class="toolbar">
+<label>Query:<input type="text" value="relation(Rel, olf, X)." /></label>
+<button>Query</button>
+</div>
+
+<div class="result">
+</div>
+</div>
 
 <h2>Progress</h2>
 
@@ -35,11 +356,13 @@ X = 42
 
 <table>
 <thead>
-  <th></th>
-  <th>Erlang R16B</th>
-  <th>JavaScript 1.8.5</th>
-  <th>Python 2.7</th>
-  <th>Ruby 1.9+</th>
+  <tr>
+    <th></th>
+    <th>Erlang R16B</th>
+    <th>JavaScript 1.8.5</th>
+    <th>Python 2.7</th>
+    <th>Ruby 1.9+</th>
+  </tr>
 </thead>
 <tbody>
   <tr>
