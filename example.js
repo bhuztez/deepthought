@@ -12,10 +12,10 @@ function setup_example(rulesTextArea, queryInput, queryButton, resultDiv) {
     }
 
     function show_answers(answers) {
-        var keys = [k for each (k in answers[0].keys())];
+        var keys = Array.from(answers[0].keys());
         var table = document.createElement("table");
         var thead = document.createElement("thead");
-        for each (var k in keys) {
+        for (var k of keys) {
             var th = document.createElement("th");
             th.appendChild(document.createTextNode(k[1]));
             thead.appendChild(th);
@@ -23,10 +23,10 @@ function setup_example(rulesTextArea, queryInput, queryButton, resultDiv) {
         table.appendChild(thead);
 
         var tbody = document.createElement("tbody");
-        for each (var answer in answers) {
+        for (var answer of answers) {
             var tr = document.createElement("tr");
 
-            for each (var key in keys) {
+            for (var key of keys) {
                 var td = document.createElement("td");
                 td.appendChild(document.createTextNode(answer.subst(key)));
                 tr.appendChild(td);
